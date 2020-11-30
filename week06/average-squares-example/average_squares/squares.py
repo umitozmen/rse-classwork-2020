@@ -1,5 +1,6 @@
 """Computation of weighted average of squares."""
 from argparse import ArgumentParser
+from pathlib import Path
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """ Return the weighted average of a list of values.
@@ -53,11 +54,19 @@ def convert_numbers(list_of_strings):
 if __name__ == "__main__":
     
     parser = ArgumentParser(description="Generate average of squares")
-    parser.add_argument('numbers' , type=int, nargs= '+', help="the list of numbers")
+    parser.add_argument('--filePath' , type=str, help="the txt file path that has the list of numbers")
     parser.add_argument('--weights', '-w' , type=int, nargs= '+', help="the list of weights")
     arguments = parser.parse_args()
     
-    numbers = arguments.numbers
+    data_path = Path(arguments.filePath)      
+    with open(data_path, 'r') as f:
+        try:
+            for line in f:
+                numbers = [int(n) for n in line.split(",")]
+                print(numbers)
+        except:
+            raise 'The file you are trying to load is not a valid file'
+
     if arguments.weights:
         weights = arguments.weights
     else:
